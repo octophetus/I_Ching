@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_23_230827) do
+ActiveRecord::Schema.define(version: 2020_02_23_234855) do
+
+  create_table "readings", force: :cascade do |t|
+    t.string "question"
+    t.text "notes"
+    t.integer "first_place"
+    t.integer "second_place"
+    t.integer "third_place"
+    t.integer "fourth_place"
+    t.integer "fifth_place"
+    t.integer "sixth_place"
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_readings_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
