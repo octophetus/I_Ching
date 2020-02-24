@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_24_001338) do
+ActiveRecord::Schema.define(version: 2020_02_24_003426) do
 
   create_table "hexagrams", force: :cascade do |t|
     t.integer "number"
@@ -22,6 +22,13 @@ ActiveRecord::Schema.define(version: 2020_02_24_001338) do
     t.text "judgment"
     t.text "image"
     t.text "commentary"
+  end
+
+  create_table "lines", force: :cascade do |t|
+    t.integer "places"
+    t.integer "changing_line"
+    t.integer "hexagram_id"
+    t.index ["hexagram_id"], name: "index_lines_on_hexagram_id"
   end
 
   create_table "readings", force: :cascade do |t|
