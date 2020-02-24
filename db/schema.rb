@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_24_000156) do
+ActiveRecord::Schema.define(version: 2020_02_24_001338) do
+
+  create_table "hexagrams", force: :cascade do |t|
+    t.integer "number"
+    t.string "name"
+    t.string "nicknames"
+    t.string "above"
+    t.string "below"
+    t.text "general"
+    t.text "judgment"
+    t.text "image"
+    t.text "commentary"
+  end
 
   create_table "readings", force: :cascade do |t|
     t.string "question"
