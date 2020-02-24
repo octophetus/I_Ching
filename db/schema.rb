@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_23_234855) do
+ActiveRecord::Schema.define(version: 2020_02_24_000156) do
 
   create_table "readings", force: :cascade do |t|
     t.string "question"
@@ -23,6 +23,12 @@ ActiveRecord::Schema.define(version: 2020_02_23_234855) do
     t.integer "sixth_place"
     t.integer "user_id"
     t.index ["user_id"], name: "index_readings_on_user_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "tagname"
+    t.integer "reading_id"
+    t.index ["reading_id"], name: "index_tags_on_reading_id"
   end
 
   create_table "users", force: :cascade do |t|
