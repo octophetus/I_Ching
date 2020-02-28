@@ -1,0 +1,64 @@
+<button id="TossCoins">Toss Coins</button>
+<div id="result"></div>
+<div id="hexagram"></div>
+<button id="NewReading" style="display: none">New Reading</button>
+
+<script>
+	var rolls = [];
+	var headsPath = "<%= image_path "heads.png" %>";
+	var tailsPath = "<%= image_path "tails.png" %>";
+	var yinunchangingPath = "<%= image_path "yin_unchanging.png" %>";
+	var yinchangingPath = "<%= image_path "yin_changing.png" %>";
+	var yangunchangingPath = "<%= image_path "yang_unchanging.png" %>";
+	var yangchangingPath = "<%= image_path "yang_changing.png" %>";
+
+	function getRandomInt(min, max) {
+	    min = Math.ceil(min);
+	    max = Math.floor(max);
+	    return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+
+	$("#TossCoins").click(() => {
+		$('#result').empty();
+		var one = getRandomInt(2, 3);
+		var two = getRandomInt(3, 3);
+		var three = getRandomInt(2, 3);
+
+		rolls.push([one, two, three]);
+
+		[one, two, three].forEach((coin) => {
+			if (coin === 2) {
+				$('#result').append('<img src="' + tailsPath + '">')
+			} else if (coin === 3) {
+				$('#result').append('<img src="' + headsPath + '">')				
+			}
+		})
+
+		if (rolls.length === 6) {
+			var hexagram = [];
+			rolls.forEach((roll) => hexagram.push(roll[0] + roll[1] + roll[2]));
+			hexagram.forEach((line) => {
+				if (line === 6) {
+					$('#hexagram').append('<img src="' + yinchangingPath + '"><br>')				
+				} else if (line === 7) {
+					$('#hexagram').append('<img src="' + yangunchangingPath + '"><br>')										
+				} else if (line === 8) {
+					$('#hexagram').append('<img src="' + yinunchangingPath + '"><br>')
+				} else if (line === 9) {
+					$('#hexagram').append('<img src="' + yangchangingPath + '"><br>')
+				}
+			})
+
+			$('#TossCoins').hide();
+			$('#NewReading').show()
+			$('#NewReading').click(() => {
+				rolls = [];
+				$('#result').empty();
+				$('#hexagram').empty();
+				$('#TossCoins').show();
+				$('#NewReading').hide();
+			});
+
+		}
+	})
+</script>
