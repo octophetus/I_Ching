@@ -1,7 +1,15 @@
 <button id="TossCoins">Toss Coins</button>
 <div id="result"></div>
 <div id="hexagram"></div>
+<div id="hexagram-meaning"></div>
 <button id="NewReading" style="display: none">New Reading</button>
+
+<style>
+	#hexagram-meaning p {
+		white-space: pre;
+		white-space: pre-line;
+	}
+</style>
 
 <script>
 	var rolls = [];
@@ -16,6 +24,18 @@
 	    min = Math.ceil(min);
 	    max = Math.floor(max);
 	    return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+
+	function ordinalSuffix(n) {
+		if (n === 1) {
+			return 'st';
+		} else if (n === 2) {
+			return 'nd';
+		} else if (n === 3) {
+			return 'rd';
+		} else if (n >= 4) {
+			return 'th';
+		}
 	}
 
 	$("#TossCoins").click(() => {
@@ -39,13 +59,13 @@
 			rolls.forEach((roll) => hexagram.push(roll[0] + roll[1] + roll[2]));
 			hexagram.forEach((line) => {
 				if (line === 6) {
-					$('#hexagram').append('<img src="' + yinchangingPath + '"><br>')				
+					$('#hexagram').prepend('<img src="' + yinchangingPath + '"><br>')				
 				} else if (line === 7) {
-					$('#hexagram').append('<img src="' + yangunchangingPath + '"><br>')										
+					$('#hexagram').prepend('<img src="' + yangunchangingPath + '"><br>')										
 				} else if (line === 8) {
-					$('#hexagram').append('<img src="' + yinunchangingPath + '"><br>')
+					$('#hexagram').prepend('<img src="' + yinunchangingPath + '"><br>')
 				} else if (line === 9) {
-					$('#hexagram').append('<img src="' + yangchangingPath + '"><br>')
+					$('#hexagram').prepend('<img src="' + yangchangingPath + '"><br>')
 				}
 			})
 
@@ -57,8 +77,63 @@
 				$('#hexagram').empty();
 				$('#TossCoins').show();
 				$('#NewReading').hide();
+				$('#hexagram-meaning').empty();
 			});
 
+			$.post({
+				url: '/readings.json',
+				data: {
+					reading: rolls.map((roll) => roll[0] + roll[1] + roll[2]),
+				},
+				success: (response) => {
+					$('#hexagram-meaning').append(
+						'<h2>' + response.number + '. ' + response.name + '</h2>'
+					);
+					$('#hexagram-meaning').append(
+						'<p><strong>' + response.nicknames + '</strong></p>'
+					);
+
+					$('#hexagram-meaning').append(
+						'<h3>Above: ' + response.above + '</h3>'
+					);
+					$('#hexagram-meaning').append(
+						'<h3>Below: ' + response.below + '</h3>'
+					);
+
+
+					$('#hexagram-meaning').append('<h4>General</h4>');
+					$('#hexagram-meaning').append('<p>' + response.general + '</p>');
+
+					$('#hexagram-meaning').append('<h4>Judgment</h4>');
+					$('#hexagram-meaning').append('<p>' + response.judgment + '</p>');
+
+					$('#hexagram-meaning').append('<h4>Image</h4>');
+					$('#hexagram-meaning').append('<p>' + response.image + '</p>');		
+
+					$('#hexagram-meaning').append('<h4>Commentary</h4>');
+					$('#hexagram-meaning').append('<p>' + response.commentary + '</p>');
+
+					var lines = rolls.map((roll) => roll[0] + roll[1] + roll[2]);
+
+					if (lines.indexOf(6) > -1 || lines.indexOf(9) > -1) {
+						$('#hexagram-meaning').append('<h4>Changing Lines</h4>');
+					}
+
+					response.lines.forEach((line, index) => {
+						if (lines[index] === 6 || lines[index] === 9) {
+							$('#hexagram-meaning').append(`
+								<strong>
+									${lines[index]} in the ${line.places}${
+										ordinalSuffix(line.places)
+									} place means:
+								</strong> 
+								<p>${line.meaning}</p>
+								
+							`)
+						}							
+					});												
+				},
+			});
 		}
 	})
 </script>
