@@ -1,0 +1,20 @@
+<table>
+	<caption>Index of All User's Readings</caption>
+	<thead>
+		<tr>
+			<th>Date:</th>
+			<th>Question:</th>
+			<th>Hexagram:</th>
+		</tr>
+	</thead>
+  <tbody>
+  	<% @readings.each do |reading| %>
+      <tr>
+        <td><%= reading.timestamp.strftime("%b %e, %Y")%></td>
+        <td><%= reading.question%></td>
+        <td><%= reading.hexagram.id %>. <%= reading.hexagram.name %></td>
+
+      </tr>
+    <% end %>
+  </tbody>
+ </table>

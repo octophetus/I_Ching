@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_28_032134) do
+ActiveRecord::Schema.define(version: 2020_02_29_211002) do
 
   create_table "hexagrams", force: :cascade do |t|
     t.integer "number"
@@ -47,6 +47,8 @@ ActiveRecord::Schema.define(version: 2020_02_28_032134) do
     t.integer "fifth_place"
     t.integer "sixth_place"
     t.integer "user_id"
+    t.integer "hexagram_id"
+    t.datetime "timestamp"
     t.index ["user_id"], name: "index_readings_on_user_id"
   end
 

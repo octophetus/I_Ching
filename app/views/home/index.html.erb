@@ -1,3 +1,18 @@
+<div id="question_prompt">
+	What is your question?
+	<br>
+	Try to avoid "yes or no" and "either/or" types of questions.
+	<br>
+	Writing your question down is just as much about having it for posterity as it is about ensuring your question is clear in your mind.
+	<br>
+	Sage advice - If you can’t write your question in a single, understandable sentence, your mind is not clear enough to send a message.
+	<br>
+	<br>
+	Enter your question below to proceed.
+	<br>
+	<br>
+	<input type="Text" Name="Question">
+</div>
 <button id="TossCoins">Toss Coins</button>
 <div id="result"></div>
 <div id="hexagram"></div>
@@ -9,6 +24,7 @@
 		white-space: pre;
 		white-space: pre-line;
 	}
+	input {width: 500px;}
 </style>
 
 <script>
@@ -40,6 +56,7 @@
 
 	$("#TossCoins").click(() => {
 		$('#result').empty();
+		$('#question_prompt').hide();
 		var one = getRandomInt(2, 3);
 		var two = getRandomInt(3, 3);
 		var three = getRandomInt(2, 3);
@@ -78,11 +95,13 @@
 				$('#TossCoins').show();
 				$('#NewReading').hide();
 				$('#hexagram-meaning').empty();
+				$('#question_prompt').show();
 			});
 
 			$.post({
 				url: '/readings.json',
 				data: {
+					question: $('input[name=Question]').val(),
 					reading: rolls.map((roll) => roll[0] + roll[1] + roll[2]),
 				},
 				success: (response) => {
